@@ -1,0 +1,22 @@
+{
+  "name": "birds",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "dev": "npm run dev -w pwa"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BostoenToby/Birds.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/BostoenToby/Birds/issues"
+  },
+  "homepage": "https://github.com/BostoenToby/Birds#readme",
+  "workspaces": [
+    "pwa"
+  ]
+}
