@@ -63,6 +63,7 @@
     import { X, Loader2 } from 'lucide-vue-next'
 
     import useAuthentication from '../../composables/useAuthentication'
+import router from '../../bootstrap/router'
 
     export default defineComponent({
         components: {
@@ -88,7 +89,8 @@
                     return
                 }
                 login(userInput.email, userInput.password).then((u) => {
-                console.log('Logged in: ', u)
+                console.log('User logged in: ', u)
+                router.push("/account")
                 }).catch((error) => {
                     errorMessage.value = error.message
                 }).finally(() => {

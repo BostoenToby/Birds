@@ -12,6 +12,5 @@ const { restoreUser } = useAuthentication()
 ;(async function() {
     await restoreUser()
     app.use(router)
-
-app.mount('#app')
+    app.mount('#app')
 })()
