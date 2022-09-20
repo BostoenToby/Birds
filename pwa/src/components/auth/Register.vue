@@ -1,8 +1,8 @@
 <template>
     <div>
-        <form @submit.prevent="">
+        <form @submit.prevent="submitForm">
             <header>
-                <h2 class="mb-6 text-3xl ">Register</h2>
+                <h2 class="mb-6 text-3xl">Register</h2>
             </header>
 
             <div v-if="errorMessage" 
@@ -16,6 +16,7 @@
                 <label class="mb-1 block text-neutral-500 focus-within:text-neutral-900" for="name">
                     <span class="mb-2 block">Name</span>
                     <input 
+                    v-model="userInput.name"
                     id="name" 
                     class="w-full rounded-md border border-neutral-200 px-3 py-1 text-neutral-800 outline-none ring-neutral-300 focus-visible:ring" 
                     type="text"
@@ -28,6 +29,7 @@
                 <label class="mb-1 block text-neutral-500 focus-within:text-neutral-900" for="email">
                     <span class="mb-2 block">Email</span>
                     <input 
+                    v-model="userInput.email"
                     id="email" 
                     class="w-full rounded-md border border-neutral-200 px-3 py-1 text-neutral-800 outline-none ring-neutral-300 focus-visible:ring" 
                     type="email"
@@ -41,6 +43,7 @@
                 <label class="mb-1 block text-neutral-500 focus-within:text-neutral-900" for="password">
                     <span class="mb-2 block">Password</span>
                     <input 
+                    v-model="userInput.password"
                     id="password" 
                     class="w-full rounded-md border border-neutral-200 px-3 py-1 text-neutral-800 outline-none ring-neutral-300 focus-visible:ring" 
                     type="password"
@@ -67,9 +70,11 @@
 </template>
 
 <script lang="ts">
-    import { defineComponent, ref, Ref } from 'vue'
+    import { defineComponent, reactive, ref, Ref } from 'vue'
 
     import { X, Loader2 } from 'lucide-vue-next'
+
+    import useAuthentication from '../../composables/useAuthentication'
 
     export default defineComponent({
         components: {
@@ -78,11 +83,39 @@
         },
 
         setup() {
-            const errorMessage: Ref<string> = ref('Something went wrong')
+            const { register } = useAuthentication()
+            const errorMessage: Ref<string> = ref("")
             const loading: Ref<boolean> = ref(false)
+
+            const userInput = reactive({
+                name: '',
+                email: '',
+                password: '',
+            })
+
+            const submitForm = () => {
+                loading.value = true
+                if(userInput.name === "" || userInput.email === "" || userInput.password === ""){
+                    loading.value = false
+                    errorMessage.value = "Please fill in all fields"
+                    return
+                }
+                register(userInput.name, userInput.email, userInput.password).then((u) => {
+                console.log('User created: ', u)
+                }).catch((error) => {
+                    errorMessage.value = error.message
+                }).finally(() => {
+                    loading.value = false
+                })
+                console.log(userInput)
+            }
+
             return{
                 errorMessage,
                 loading,
+                userInput,
+
+                submitForm,
             }
         }
     }) 
