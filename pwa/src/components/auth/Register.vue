@@ -1,3 +1,89 @@
 <template>
-    <h1>Register</h1>
+    <div>
+        <form @submit.prevent="">
+            <header>
+                <h2 class="mb-6 text-3xl ">Register</h2>
+            </header>
+
+            <div v-if="errorMessage" 
+            class="mb-3 flex items-center justify-between rounded-md bg-red-100 px-3 py-1">
+                <p class="text-sm text-red-600">{{ errorMessage }}</p>
+                <button @click="errorMessage = ''" class="rounded-full p-3 hover:bg-red-200 focus:outline-none focus:ring-1 ring-red-500">
+                    <X class="h-4 w-4 text-red-600" />
+                </button>
+            </div>
+            <div>
+                <label class="mb-1 block text-neutral-500 focus-within:text-neutral-900" for="name">
+                    <span class="mb-2 block">Name</span>
+                    <input 
+                    id="name" 
+                    class="w-full rounded-md border border-neutral-200 px-3 py-1 text-neutral-800 outline-none ring-neutral-300 focus-visible:ring" 
+                    type="text"
+                    name="name" />
+
+                </label>
+            </div>
+
+            <div class="mt-3">
+                <label class="mb-1 block text-neutral-500 focus-within:text-neutral-900" for="email">
+                    <span class="mb-2 block">Email</span>
+                    <input 
+                    id="email" 
+                    class="w-full rounded-md border border-neutral-200 px-3 py-1 text-neutral-800 outline-none ring-neutral-300 focus-visible:ring" 
+                    type="email"
+                    name="email"
+                    autocomplete="email" />
+
+                </label>
+            </div>
+
+            <div class="mt-3">
+                <label class="mb-1 block text-neutral-500 focus-within:text-neutral-900" for="password">
+                    <span class="mb-2 block">Password</span>
+                    <input 
+                    id="password" 
+                    class="w-full rounded-md border border-neutral-200 px-3 py-1 text-neutral-800 outline-none ring-neutral-300 focus-visible:ring" 
+                    type="password"
+                    name="password"
+                    autocomplete="current-password" />
+
+                </label>
+            </div>
+
+            <button class="mt-6 flex w-full items-center justify-center rounded-md bg-neutral-700 py-2 px-3 text-white outline-none ring-neutral-600 hover:bg-neutral-900 focus-visible:ring" :disabled="loading">
+                <span v-if="!loading">Create account</span>
+                <div v-else>
+                    <Loader2 class="animate-spin"/>
+                </div>
+            </button>
+
+            <p class="mt-3 text-center text-sm">
+                <RouterLink to="/auth/login" class="rounded-md outline-none ring-neutral-300 hover:underline focus-visible:ring">
+                    Already have an account?
+                </RouterLink>
+            </p>
+        </form>
+    </div>
 </template>
+
+<script lang="ts">
+    import { defineComponent, ref, Ref } from 'vue'
+
+    import { X, Loader2 } from 'lucide-vue-next'
+
+    export default defineComponent({
+        components: {
+            X,
+            Loader2,
+        },
+
+        setup() {
+            const errorMessage: Ref<string> = ref('Something went wrong')
+            const loading: Ref<boolean> = ref(false)
+            return{
+                errorMessage,
+                loading,
+            }
+        }
+    }) 
+</script>
