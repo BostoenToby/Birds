@@ -14,7 +14,6 @@ const user: Ref<User | null> = ref(null)
 
 export default () => {
   const { auth } = useFirebase()
-
   const setUser = (u: User | null) =>
     (user.value = u)
 

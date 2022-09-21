@@ -1,5 +1,5 @@
 <template>
-  <h1 class="text-3xl text-red-500">
+  <h1 class="">
     Home
   </h1>
 </template>
