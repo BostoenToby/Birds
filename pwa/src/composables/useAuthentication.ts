@@ -1,4 +1,4 @@
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile, User, UserCredential } from "firebase/auth"
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile, User, UserCredential, sendPasswordResetEmail } from "firebase/auth"
 import useFirebase from "./useFirebase"
 import { ref, Ref } from 'vue'
 
@@ -67,7 +67,14 @@ export default () => {
             })
         })
     }
+
     // TODO: forgot password
+    const forgotPassword = (email: string): Promise<void> => {
+        return new Promise((resolve, reject) => {
+            sendPasswordResetEmail(auth, email).then(() => resolve()).catch((error) => reject(error))
+        })
+    }
+
     // TODO: track user
 
     return{
@@ -78,5 +85,6 @@ export default () => {
         login,
         logout,
         restoreUser,
+        forgotPassword,
     }
 }

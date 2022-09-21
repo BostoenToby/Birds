@@ -39,6 +39,11 @@
                     autocomplete="current-password" />
 
                 </label>
+                <p class="mt-1 text-neutral-500 hover:text-neutral-800 text-sm">
+                    <RouterLink class="rounded-md outline-none ring-neutral-300 hover:underline focus-visible:ring" to="/auth/forgot-password">
+                        <p>Forgot password?</p>
+                    </RouterLink>
+                </p>
             </div>
 
             <button class="mt-6 flex w-full items-center justify-center rounded-md bg-neutral-700 py-2 px-3 text-white outline-none ring-neutral-600 hover:bg-neutral-900 focus-visible:ring" :disabled="loading">
@@ -63,7 +68,8 @@
     import { X, Loader2 } from 'lucide-vue-next'
 
     import useAuthentication from '../../composables/useAuthentication'
-import router from '../../bootstrap/router'
+    
+    import { useRouter } from 'vue-router'
 
     export default defineComponent({
         components: {
@@ -73,6 +79,9 @@ import router from '../../bootstrap/router'
 
         setup() {
             const { login } = useAuthentication()
+            // push --> mogelijk tot terugkeren 
+            // replace --> pagina wordt vervangen, geen mogelijkheid tot terugkeren
+            const { replace } = useRouter()
             const errorMessage: Ref<string> = ref("")
             const loading: Ref<boolean> = ref(false)
 
@@ -89,8 +98,8 @@ import router from '../../bootstrap/router'
                     return
                 }
                 login(userInput.email, userInput.password).then((u) => {
-                console.log('User logged in: ', u)
-                router.push("/account")
+                    console.log('User logged in: ', u)
+                    return replace("/")
                 }).catch((error) => {
                     errorMessage.value = error.message
                 }).finally(() => {

@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
+    "format": "prettier --write .",
     "dev": "npm run dev -w pwa"
   },
   "repository": {

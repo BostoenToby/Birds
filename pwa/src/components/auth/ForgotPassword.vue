@@ -23,20 +23,19 @@
                     type="email"
                     name="email"
                     autocomplete="email" />
-
                 </label>
             </div>
 
             <button class="mt-6 flex w-full items-center justify-center rounded-md bg-neutral-700 py-2 px-3 text-white outline-none ring-neutral-600 hover:bg-neutral-900 focus-visible:ring" :disabled="loading">
-                <span v-if="!loading">Reset password</span>
+                <span v-if="!loading">Reset password reset link</span>
                 <div v-else>
                     <Loader2 class="animate-spin"/>
                 </div>
             </button>
 
             <p class="mt-3 text-center text-sm">
-                <RouterLink to="/auth/register" class="rounded-md outline-none ring-neutral-300 hover:underline focus-visible:ring">
-                    Don't have an account?
+                <RouterLink to="/auth/login" class="rounded-md outline-none ring-neutral-300 hover:underline focus-visible:ring">
+                    Wait, I remember my password
                 </RouterLink>
             </p>
         </form>
@@ -49,7 +48,8 @@
     import { X, Loader2 } from 'lucide-vue-next'
 
     import useAuthentication from '../../composables/useAuthentication'
-import router from '../../bootstrap/router'
+
+    import { useRouter } from 'vue-router'
 
     export default defineComponent({
         components: {
@@ -58,31 +58,24 @@ import router from '../../bootstrap/router'
         },
 
         setup() {
-            const { login } = useAuthentication()
+            const { forgotPassword } = useAuthentication()
+            const { replace } = useRouter()
             const errorMessage: Ref<string> = ref("")
             const loading: Ref<boolean> = ref(false)
 
             const userInput = reactive({
                 email: '',
-                password: '',
             })
 
             const submitForm = () => {
                 loading.value = true
-                if(userInput.email === "" || userInput.password === ""){
+                if(userInput.email === ""){
                     loading.value = false
                     errorMessage.value = "Please fill in all fields"
                     return
                 }
-                login(userInput.email, userInput.password).then((u) => {
-                console.log('User logged in: ', u)
-                router.push("/account")
-                }).catch((error) => {
-                    errorMessage.value = error.message
-                }).finally(() => {
-                    loading.value = false
-                })
-                console.log(userInput)
+                forgotPassword(userInput.email).then(() => console.log("New mail sent")).catch((error) => errorMessage.value = error)
+                replace('/login')
             }
 
             return{

@@ -9,6 +9,7 @@ const app: VueApp = createApp(App)
 
 const { restoreUser } = useAuthentication()
 
+// self evoking function --> kan ook een functie maken en die direct aanroepen
 ;(async function() {
     await restoreUser()
     app.use(router)
