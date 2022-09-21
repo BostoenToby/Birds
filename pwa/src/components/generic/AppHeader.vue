@@ -1,3 +1,3 @@
 <template>
-  <h1>Log</h1>
+  <header></header>
 </template>
