@@ -1,31 +1,31 @@
 <template>
     <ul class="grid grid-cols-4 w-full sm:w-auto text-center items-center text-xs space-x-3 font-medium sm:space-x-3 sm:text-sm">
                 <li>
-                    <Home class="h-6 sm:hidden mb-2 mx-auto"/>
-                    <router-link class="px-3 py-6" to="/">
+                    <router-link exact-active-class="opacity-40" class="outline-none focus-visible:ring-2 rounded-md inline-block px-3 py-6" to="/">
+                        <Home class="h-6 sm:hidden mb-2 mx-auto"/>
                         Home
                     </router-link>
                 </li>
                 <li>
-                    <Feather class="h-6 sm:hidden mb-2 mx-auto"/>
-                    <router-link class="px-3 py-6" to="/birds">
+                    <router-link active-class="opacity-40" class="outline-none focus-visible:ring-2 rounded-md inline-block px-3 py-6" to="/birds">
+                        <Feather class="h-6 sm:hidden mb-2 mx-auto"/>
                         Birds
                     </router-link>
                 </li>
                 <li>
-                    <Clipboard class="h-6 sm:hidden mb-2 mx-auto"/>
-                    <router-link class="px-3 py-6" to="/observations">
+                    <router-link active-class="opacity-40" class="outline-none focus-visible:ring-2 rounded-md inline-block px-3 py-6" to="/observations">
+                        <Clipboard class="h-6 sm:hidden mb-2 mx-auto"/>
                         Observations
                     </router-link>
                 </li>
                 <li>
-                    <Scroll class="h-6 sm:hidden mb-2 mx-auto"/>
-                    <router-link class="px-3 py-6" to="/log">
+                    <router-link active-class="opacity-40" class="outline-none focus-visible:ring-2 rounded-md inline-block px-3 py-6" to="/log">
+                        <Scroll class="h-6 sm:hidden mb-2 mx-auto"/>
                         Log
                     </router-link>
                 </li>
                 <li class="hidden pl-6 sm:block">
-                    <router-link class="px-3 py-6" to="/account" v-if="user">
+                    <router-link class="px-3 py-6 outline-none focus-visible:ring-2 rounded-md" to="/account" v-if="user">
                         {{user.displayName}}
                     </router-link>
                     <router-link class="px-3 py-6" to="/auth/login" v-else></router-link>
