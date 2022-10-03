@@ -1,137 +1,167 @@
 import { Test, TestingModule } from '@nestjs/testing'
-import { getRepositoryToken } from '@nestjs/typeorm'
-import { Repository } from 'typeorm'
+import { BirdsResolver } from './birds.resolver'
 import { BirdsService } from './birds.service'
+import { CreateBirdInput } from './dto/create-bird.input'
 import { Bird } from './entities/bird.entity'
-import { createBirdInputStub, createBird } from './stubs/birds.stubs'
+import {
+  createBird,
+  createBirdInputStub,
+} from './stubs/birds.stubs'
 import { ObjectId } from 'mongodb'
+import { MessageTypes } from '../../src/bootstrap/entities/ClientMessage'
 
-describe('BirdsService', () => {
+describe('BirdsResolver', () => {
+  let resolver: BirdsResolver
   let service: BirdsService
-  let mockBirdRepository: Repository<Bird>
-
   beforeEach(async () => {
-    const module: TestingModule = 
-    await Test.createTestingModule({
-      providers: [
-        BirdsService,
-        {
-          provide: getRepositoryToken(Bird),
-          useValue: {
-            save: jest.fn().mockResolvedValue(createBird()),
-            find: jest.fn().mockResolvedValue([createBird()]),
-            findOne: jest.fn().mockResolvedValue(createBird()),
-            delete: jest.fn(),
+    const module: TestingModule =
+      await Test.createTestingModule({
+        providers: [
+          BirdsResolver,
+          //BirdsService,
+          {
+            provide: BirdsService,
+            useValue: {
+              create: jest
+                .fn()
+                .mockResolvedValue(createBird()),
+              findAll: jest
+                .fn()
+                .mockResolvedValue([createBird()]),
+              findOne: jest
+                .fn()
+                .mockResolvedValue(createBird()),
+              update: jest
+                .fn()
+                .mockResolvedValue(createBird()),
+              remove: jest
+                .fn()
+                .mockResolvedValue({ affected: 1 }),
+            },
           },
-        },
-      ],
-    }).compile()
+        ],
+      }).compile()
 
+    resolver = module.get<BirdsResolver>(BirdsResolver)
     service = module.get<BirdsService>(BirdsService)
-    mockBirdRepository = module.get<Repository<Bird>>(getRepositoryToken(Bird))
   })
 
   it('should be defined', () => {
-    expect(service).toBeDefined()
+    expect(resolver).toBeDefined()
   })
 
-  describe('create', () => {
-    describe('when create is called', () => {
-      it('should call the repository save method', async () => {
-        const saveSpy = jest.spyOn(mockBirdRepository, 'save')
-        const newBird = new Bird()
-        await service.create(newBird)
-        expect(saveSpy).toBeCalledTimes(1)
-      })
+  describe('createBird', () => {
+    let createBirdDTO: CreateBirdInput
+    let resultBird: Bird
 
-      it('should be called with the correct params', async () => {
-        const saveSpy = jest.spyOn(mockBirdRepository, 'save')
-        //const newBird = new Bird()
-        const newBird = createBirdInputStub() //<- function that creates a CreateInputBird object
-        await service.create(newBird)
-        expect(saveSpy).toBeCalledWith(newBird)
-      })
+    beforeEach(async () => {
+      createBirdDTO = createBirdInputStub()
+      resultBird = await resolver.createBird(createBirdDTO)
+    })
 
+    describe('when createBird is called', () => {
+      it('should call the service create method', async () => {
+        expect(service.create).toBeCalledTimes(1)
+      })
       it('should return the created bird', async () => {
-        const newBird = createBirdInputStub()
-        const toReturndBird = createBird()
-
-        const result = await service.create(newBird)
-        expect(result).toEqual(toReturndBird)
+        //result of the resolver is equal to the result of the mocked service
+        expect(resultBird).toEqual(createBird())
       })
     })
   })
 
   describe('findAll', () => {
-    describe('when findAll is called', () => {
-      it('should call the repository find method', async () => {
-        const findSpy = jest.spyOn(mockBirdRepository, 'find')
-        await service.findAll()
-        expect(findSpy).toBeCalledTimes(1)
-      })
+    let resultBirds: Bird[]
+    beforeEach(async () => {
+      resultBirds = await resolver.findAll()
+    })
 
-      it('should return the list of birds', async () => {
-        const toReturndBird = createBird()
-        const result = await service.findAll()
-        expect(result).toEqual([toReturndBird])
+    describe('when findAll is called', () => {
+      it('should call birdsService.findAll', async () => {
+        expect(service.findAll).toBeCalledTimes(1)
+      })
+      it('should return the created bird', async () => {
+        expect(resultBirds).toEqual([createBird()])
       })
     })
   })
 
   describe('findOne', () => {
-    describe('when findOne is called', () => {
-      it('should call the repository findOne method', async () => {
-        const findSpy = jest.spyOn(mockBirdRepository, 'findOne')
-        await service.findOne('d89a0bA4cc619d347024f42e')
-        expect(findSpy).toBeCalledTimes(1)
-      })
+    let resultBird: Bird
+    beforeEach(async () => {
+      resultBird = await resolver.findOne(createBird().id)
+    })
 
-      it('should be called with the correct params', async () => {
-        const findSpy = jest.spyOn(mockBirdRepository, 'findOne')
-        await service.findOne('d89a0bA4cc619d347024f42e')
-        expect(findSpy).toBeCalledWith(new ObjectId('d89a0bA4cc619d347024f42e'))
+    describe('When findOne is called', () => {
+      it('should call birdsService.findOne', async () => {
+        expect(service.findOne).toBeCalledTimes(1)
       })
-
-      it('should return a bird', async () => {
-        const toReturndBird = createBird()
-        const result = await service.findOne('d89a0bA4cc619d347024f42e')
-        expect(result).toEqual(toReturndBird)
+      it('should call birdsService.findOne with the correct params', async () => {
+        expect(service.findOne).toBeCalledWith(
+          createBird().id,
+        )
+      })
+      it('should return the created bird', async () => {
+        expect(resultBird).toEqual(createBird())
       })
     })
   })
 
   describe('update', () => {
-    describe('when update is called', () => {
-      it('should call the repository save method', async () => {
-        const saveSpy = jest.spyOn(mockBirdRepository, 'save')
-        const newBird = createBird()
-        await service.update(newBird)
-        expect(saveSpy).toBeCalledTimes(1)
-      })
+    let resultBird: Bird
+    beforeEach(async () => {
+      resultBird = await resolver.updateBird(createBird())
+    })
 
-      it('should be called with the correct params', async () => {
-        const saveSpy = jest.spyOn(mockBirdRepository, 'save')
-        const newBird = createBird()
-        await service.update(newBird)
-        expect(saveSpy).toBeCalledWith(newBird)
+    describe('when updateBird is called', () => {
+      it('should call birdsService.update', async () => {
+        expect(service.update).toBeCalledTimes(1)
       })
-
-      it('should return the updated bird', async () => {
-        const newBird = createBird()
-        const toReturndBird = createBird()
-        const result = await service.update(newBird)
-        expect(result).toEqual(toReturndBird)
+      it('should call birdsService.update with the correct params', async () => {
+        expect(service.update).toBeCalledWith(createBird())
+      })
+      it('should return the created bird', async () => {
+        expect(resultBird).toEqual(createBird())
       })
     })
   })
 
   describe('remove', () => {
-    describe('when remove is called', () => {
-      it('should call the repository delete method', async () => {
-        const deleteSpy = jest.spyOn(mockBirdRepository, 'delete')
-        const newBird = createBird()
-        await service.remove(newBird.id)
-        expect(deleteSpy).toBeCalledTimes(1)
+    let res: any
+    beforeEach(async () => {
+      res = await resolver.removeBird(createBird().id)
+    })
+
+    describe('when removeBird is called', () => {
+      it('should call birdsService.remove', async () => {
+        expect(service.remove).toBeCalledTimes(1)
+      })
+      it('should call birdsService.remove with the correct params', async () => {
+        expect(service.remove).toBeCalledWith(
+          new ObjectId(createBird().id),
+        )
+      })
+      it('should return the correct message', async () => {
+        jest
+          .spyOn(service, 'remove')
+          .mockResolvedValue({ affected: 1, raw: '' })
+        res = await resolver.removeBird(createBird().id)
+        expect(res).toEqual({
+          type: MessageTypes.success,
+          message: 'Bird deleted',
+          statusCode: 200,
+        })
+      })
+      it('should return the correct error message', async () => {
+        jest
+          .spyOn(service, 'remove')
+          .mockResolvedValue({ affected: 5, raw: '' })
+        res = await resolver.removeBird(createBird().id)
+        expect(res).toEqual({ //zie birds.resolver.ts voor dit object dat verwacht word
+          type: MessageTypes.error,
+          message: 'Delete action went very wrong.',
+          statusCode: 400,
+        })
       })
     })
   })
