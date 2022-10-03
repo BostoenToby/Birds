@@ -6,6 +6,7 @@ import { Bird } from 'src/birds/entities/bird.entity'
 import { BirdsService } from 'src/birds/birds.service'
 import { LocationsService } from 'src/locations/locations.service'
 import { Observation } from './entities/observation.entity'
+import { Location } from 'src/locations/entities/location.entity'
 
 @Module({
   imports: [
