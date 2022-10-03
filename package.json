@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "dev": "start npm run dev -w pwa && npm run start:dev -w api"
+    "dev": "npm"
   },
   "repository": {
     "type": "git",
@@ -19,5 +19,8 @@
   "workspaces": [
     "pwa",
     "api"
-  ]
+  ],
+  "dependencies": {
+    "npm-run-all": "^4.1.5"
+  }
 }
