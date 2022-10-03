@@ -1,2 +1,4 @@
 **/node_modules/
 pwa/node_modules
+**/.env
+**/dist/
