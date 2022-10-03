@@ -44,16 +44,11 @@ export class BirdsService {
     return this.birdRepository.save(update) //Save gives us an advantage
   }
 
-  async remove(id: String): Promise<boolean> {
+  async remove(id: String): Promise<DeleteResult> {
     console.log(`This action removes a #${id} bird`)
 
     const parsedId = new ObjectId(id) //convert string to ObjectId
 
-    const r = await this.birdRepository.delete(parsedId)
-    if (r.affected) {
-      return Promise.resolve(true)
-    } else {
-      return Promise.resolve(false)
-    }
+    return this.birdRepository.delete(parsedId)
   }
 }

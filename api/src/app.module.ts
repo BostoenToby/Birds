@@ -5,6 +5,8 @@ import { graphqlConfig } from './bootstrap/graphQLConfig'
 import { GraphQLModule } from '@nestjs/graphql'
 import { ApolloDriverConfig } from '@nestjs/apollo'
 import { BirdsModule } from './birds/birds.module'
+import { LocationsModule } from './locations/locations.module';
+import { ObservationsModule } from './observations/observations.module';
 
 @Module({
   imports: [
@@ -13,6 +15,8 @@ import { BirdsModule } from './birds/birds.module'
       graphqlConfig,
     ),
     BirdsModule,
+    LocationsModule,
+    ObservationsModule,
   ], //TODO: Enchancement? Move to async provider
   controllers: [],
   providers: [],
