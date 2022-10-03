@@ -18,8 +18,8 @@ export class ObservationsService {
     observation.name = createObservationInput.name
     observation.userId = createObservationInput.userId
     observation.weather = createObservationInput.weather
-    observation.bird = createObservationInput.bird
-    observation.location = createObservationInput.location
+    observation.birdId = createObservationInput.birdId
+    observation.locationId = createObservationInput.locationId
     observation.description = createObservationInput.description
     observation.active = createObservationInput.active
     return this.observationRepository.save(observation)
@@ -41,9 +41,9 @@ export class ObservationsService {
     update.name = updateObservationInput.name
     update.userId = updateObservationInput.userId
     update.weather = updateObservationInput.weather
-    update.bird = updateObservationInput.bird
+    update.birdId = updateObservationInput.birdId
     update.description = updateObservationInput.description
-    update.location = updateObservationInput.location
+    update.locationId = updateObservationInput.locationId
     update.active = updateObservationInput.active
     return this.observationRepository.save(update)
   }
