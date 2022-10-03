@@ -1,5 +1,6 @@
 import { CreateBirdInput } from "../dto/create-bird.input";
 import { Bird } from "../entities/bird.entity";
+import { ObjectId } from 'mongodb' 
 
 export const createBirdInputStub = (): CreateBirdInput => {
     const bird = new CreateBirdInput()
@@ -14,12 +15,12 @@ export const createBirdInputStub = (): CreateBirdInput => {
 
 export const createBird = (): Bird => {
     const bird = new Bird()
-    bird.id = 'abc123'
-    bird.name = "bird"
-    bird.fullname = "bird"
-    bird.category = "bird"
-    bird.url = "bird"
+    bird.id = new ObjectId('d89a0bA4cc619d347024f42e')
+    bird.name = "name"
+    bird.fullname = "fullname"
+    bird.category = "category"
+    bird.url = "url"
     bird.observations = 2
-    bird.description = "bird" //is optioneel dus MOET er niet bij 
+    bird.description = "description" //is optioneel dus MOET er niet bij 
     return bird
 }

@@ -29,7 +29,7 @@ export class BirdsService {
   }
 
   findOne(id: string): Promise<Bird> {
-    return this.birdRepository.findOneBy(new ObjectId(id))
+    return this.birdRepository.findOne(new ObjectId(id))
   }
 
   update(updateBirdInput: UpdateBirdInput) {
@@ -45,10 +45,6 @@ export class BirdsService {
   }
 
   async remove(id: String): Promise<DeleteResult> {
-    console.log(`This action removes a #${id} bird`)
-
-    const parsedId = new ObjectId(id) //convert string to ObjectId
-
-    return this.birdRepository.delete(parsedId)
+    return this.birdRepository.delete(new ObjectId(id))
   }
 }
