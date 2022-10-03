@@ -1,6 +1,7 @@
 import { InputType, Int, Field } from '@nestjs/graphql';
 import { Bird } from 'src/birds/entities/bird.entity';
 import { Location } from 'src/locations/entities/location.entity';
+import { Column } from 'typeorm';
 
 @InputType()
 export class CreateObservationInput {
@@ -13,11 +14,17 @@ export class CreateObservationInput {
   @Field({ nullable: true })
   weather?: string
 
-  @Field(() => Bird)
-  bird: Bird
+  @Column()
+  birdId: string
 
-  @Field(() => Location)
-  location: Location
+  // @Field(() => Bird)
+  // bird: Bird
+
+  @Column()
+  locationId: string
+
+  // @Field(() => Location)
+  // location: Location
 
   @Field({ nullable: true })
   description?: string
