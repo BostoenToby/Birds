@@ -9,6 +9,7 @@ import {
 } from './stubs/birds.stubs'
 import { ObjectId } from 'mongodb'
 import { MessageTypes } from '../../src/bootstrap/entities/ClientMessage'
+import { ClientMessage } from 'src/entities/ClientMessage'
 
 describe('BirdsResolver', () => {
   let resolver: BirdsResolver
@@ -79,8 +80,10 @@ describe('BirdsResolver', () => {
     describe('when findAll is called', () => {
       it('should call birdsService.findAll', async () => {
         expect(service.findAll).toBeCalledTimes(1)
+        // could use it.todo() if you need to work this out
+        // Remark: Bird[] == [Bird]
       })
-      it('should return the created bird', async () => {
+      it('should return some birds', async () => {
         expect(resultBirds).toEqual([createBird()])
       })
     })
@@ -114,10 +117,8 @@ describe('BirdsResolver', () => {
     })
 
     describe('when updateBird is called', () => {
-      it('should call birdsService.update', async () => {
+      it('should call birdsService.update correct', async () => {
         expect(service.update).toBeCalledTimes(1)
-      })
-      it('should call birdsService.update with the correct params', async () => {
         expect(service.update).toBeCalledWith(createBird())
       })
       it('should return the created bird', async () => {
@@ -135,33 +136,30 @@ describe('BirdsResolver', () => {
     describe('when removeBird is called', () => {
       it('should call birdsService.remove', async () => {
         expect(service.remove).toBeCalledTimes(1)
-      })
-      it('should call birdsService.remove with the correct params', async () => {
         expect(service.remove).toBeCalledWith(
-          new ObjectId(createBird().id),
+          new ObjectId(createBird().id.toString()),
         )
       })
+
       it('should return the correct message', async () => {
-        jest
-          .spyOn(service, 'remove')
-          .mockResolvedValue({ affected: 1, raw: '' })
-        res = await resolver.removeBird(createBird().id)
-        expect(res).toEqual({
+        const expectResult: ClientMessage = {
           type: MessageTypes.success,
           message: 'Bird deleted',
           statusCode: 200,
-        })
+        }
+        expect(res).toEqual(expectResult)
       })
+
       it('should return the correct error message', async () => {
-        jest
-          .spyOn(service, 'remove')
-          .mockResolvedValue({ affected: 5, raw: '' })
-        res = await resolver.removeBird(createBird().id)
-        expect(res).toEqual({ //zie birds.resolver.ts voor dit object dat verwacht word
+        jest.spyOn(service, 'remove').mockResolvedValue({ affected: 5, raw: '' }) //klaarzetten om te kijken als er removed word
+        res = await resolver.removeBird(createBird().id) //efectief een bird removen zodat de spy kan kijken hiernaar
+        const expectResult: ClientMessage = {
           type: MessageTypes.error,
           message: 'Delete action went very wrong.',
           statusCode: 400,
-        })
+        }
+
+        expect(res).toEqual(expectResult)
       })
     })
   })
