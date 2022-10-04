@@ -19,9 +19,9 @@
                     </router-link>
                 </li>
                 <li>
-                    <router-link active-class="opacity-40" class="outline-none focus-visible:ring-2 rounded-md inline-block px-3 py-6" to="/log">
-                        <Scroll class="h-6 sm:hidden mb-2 mx-auto"/>
-                        Log
+                    <router-link active-class="opacity-40" class="outline-none focus-visible:ring-2 rounded-md inline-block px-3 py-6 sm:hidden" to="/account">
+                        <User class="h-6 sm:hidden mb-2 mx-auto"/>
+                        User
                     </router-link>
                 </li>
                 <li class="hidden pl-6 sm:block">
@@ -35,7 +35,7 @@
 
 <script lang="ts">
     import { defineComponent } from 'vue'
-    import { Home, Feather, Scroll, Clipboard } from 'lucide-vue-next'
+    import { Home, Feather, Scroll, Clipboard, User } from 'lucide-vue-next'
     import useAuthentication from '../../composables/useAuthentication'
 
     export default defineComponent({
@@ -44,6 +44,7 @@
             Feather,
             Scroll,
             Clipboard,
+            User
         },  
         setup(){
             const { user } = useAuthentication()

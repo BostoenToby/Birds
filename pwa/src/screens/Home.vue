@@ -1,5 +1,13 @@
 <template>
-  <h1 class="">
-    Home
-  </h1>
+  <route-holder title="Home">
+</route-holder>
 </template>
+
+<script lang="ts">
+  import RouteHolder from '../components/holders/RouteHolder.vue'
+  export default {
+    components: {
+      RouteHolder
+    }
+  }
+</script>

@@ -11,7 +11,7 @@ import { CreateBirdInput } from './dto/create-bird.input'
 import { UpdateBirdInput } from './dto/update-bird.input'
 import { DeleteResult } from 'typeorm'
 import { ClientMessage } from '../entities/ClientMessage'
-import { MessageTypes } from '../../src/bootstrap/entities/ClientMessage'
+import { MessageTypes } from 'src/bootstrap/entities/ClientMessage'
 
 @Resolver(() => Bird)
 export class BirdsResolver {

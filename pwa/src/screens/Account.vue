@@ -1,16 +1,16 @@
 <template>
-  <h1 class="font-theme text-3xl">
-    Hi, {{ user?.displayName }}
-  </h1>
+  <route-holder :title="`Hi, ${user?.displayName}`" >
   <button @click="handleLogOut">
     Log out
   </button>
+</route-holder>
 </template>
 
 <script lang="ts">
 // als setup bij script staat is alles dat erna komt in de setup function gepropt
 import useAuthentication from '../composables/useAuthentication'
 import { useRouter } from 'vue-router'
+import RouteHolder from '../components/holders/RouteHolder.vue'
 
 export default {
   setup() {
@@ -25,7 +25,7 @@ export default {
 
     return {
       user,
-
+      RouteHolder,
       handleLogOut,
     }
   },
