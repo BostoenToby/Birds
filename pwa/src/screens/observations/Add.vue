@@ -1,10 +1,6 @@
 <template>
   <route-holder title="Add observation">
     <form @submit.prevent="submitForm">
-      <header>
-        <h2 class="mb-6 text-3xl">Add observation</h2>
-      </header>
-
       <div
         v-if="errorMessage"
         class="mb-3 flex items-center justify-between rounded-md bg-red-100 px-3 py-1"
@@ -50,8 +46,15 @@
             name="birdId"
             id="birdId"
           >
-            <option selected disabled value="">Pick a bird species</option>
-            <option v-if="result" v-for="b of result.birds" :key="b.id" value="b">
+            <option selected disabled value="">
+              Pick a bird species
+            </option>
+            <option
+              v-if="result"
+              v-for="b of result.birds"
+              :key="b.id"
+              value="b"
+            >
               {{ b.name }}
             </option>
           </select>
@@ -72,15 +75,53 @@
             name="locationId"
             id="locationId"
           >
-            <option selected disabled value="">Pick a location</option>
-            <option v-if="result" v-for="l of result.locations" :key="l.id" value="l">
+            <option selected disabled value="">
+              Pick a location
+            </option>
+            <option
+              v-if="result"
+              v-for="l of result.locations"
+              :key="l.id"
+              value="l"
+            >
               {{ l.name }}
             </option>
           </select>
         </label>
       </div>
 
-      
+      <div class="mt-3">
+        <label
+          class="mb-1 block text-neutral-500 focus-within:text-neutral-900"
+          for="description"
+        >
+          <span class="mb-2 block">Description</span>
+          <textarea
+            class="w-full rounded-md border border-neutral-200 px-3 py-1 text-neutral-800 outline-none ring-neutral-300 focus-visible:ring"
+            v-model="observationInput.description"
+            name="description"
+            id="description"
+            cols="30"
+            rows="10"
+          ></textarea>
+        </label>
+      </div>
+
+      <div class="mt-3">
+        <label
+          class="mb-1 block text-neutral-500 focus-within:text-neutral-900"
+          for="weather"
+        >
+          <span class="mb-2 block">Weather</span>
+          <input
+            v-model="observationInput.weather"
+            id="weather"
+            class="w-full rounded-md border border-neutral-200 px-3 py-1 text-neutral-800 outline-none ring-neutral-300 focus-visible:ring"
+            type="text"
+            name="weather"
+          />
+        </label>
+      </div>
 
       <button
         class="mt-6 flex w-full items-center justify-center rounded-md bg-neutral-700 py-2 px-3 text-white outline-none ring-neutral-600 hover:bg-neutral-900 focus-visible:ring"
@@ -105,7 +146,10 @@
 </template>
 
 <script lang="ts">
-import { useQuery } from '@vue/apollo-composable'
+import {
+  useMutation,
+  useQuery,
+} from '@vue/apollo-composable'
 import gql from 'graphql-tag'
 import { reactive, ref, Ref } from 'vue'
 import { useRouter } from 'vue-router'
@@ -122,53 +166,58 @@ export default {
   },
 
   setup() {
-    const { login } = useAuthentication()
-    // push --> mogelijk tot terugkeren
-    // replace --> pagina wordt vervangen, geen mogelijkheid tot terugkeren
     const { replace } = useRouter()
     const errorMessage: Ref<string> = ref('')
-    // const loading: Ref<boolean> = ref(false)
     const { user } = useAuthentication()
 
     // make form, link input values, add styling
 
     const observationInput = reactive({
       birdId: '',
-      description: '',
+      description: "it' a bird 🥴",
       locationId: '',
-      name: '',
+      name: 'new bird',
       userId: user.value!.uid,
-      weather: '',
+      weather: 'sunny',
     })
 
     const ADD_OBSERVATION = gql`
-      mutation createObservation {
-        createObservation(
-          createObservationInput: {
-            active: true
-            description: ""
-            name: ""
-            userId: ""
-            weather: ""
-            locationId: ""
-            birdId: ""
-          }
-        ) {
+      mutation createObservation ($input: CreateObservationInput) {
+        createObservation(createObservationInput: $input) {
           id
         }
       }
     `
 
-    const BIRDS = gql`
+    const INSERT_DATA = gql`
       query birds {
         birds {
+          id
+          name
+        }
+
+        locations {
           id
           name
         }
       }
     `
 
-    const { result, loading, error } = useQuery(BIRDS)
+    const { result, loading, error } = useQuery(INSERT_DATA)
+    const { mutate: addObservation } = useMutation(ADD_OBSERVATION, () => ({
+      // Callback function for reactive data & variable name without $...
+      variables: {
+        createObservationInput: observationInput,
+      },
+    }))
+
+    const submitForm = async() => {
+        const observation = await addObservation().catch((err) => {
+            errorMessage.value = err.message
+        })
+
+        console.log(observation)
+    }
 
     return {
       observationInput,
@@ -176,6 +225,7 @@ export default {
       loading,
       error,
       errorMessage,
+      submitForm,
     }
   },
 }

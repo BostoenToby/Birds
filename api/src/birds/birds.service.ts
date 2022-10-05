@@ -29,6 +29,7 @@ export class BirdsService {
   }
 
   findOne(id: string): Promise<Bird> {
+    console.log("finding location", id)
     return this.birdRepository.findOne(new ObjectId(id))
   }
 

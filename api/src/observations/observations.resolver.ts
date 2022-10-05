@@ -31,6 +31,7 @@ export class ObservationsResolver {
 
   @ResolveField()
   location(@Parent() o: Observation): Promise<Location> {
+    
     return this.locationService.findOne(o.locationId)
   }
 
@@ -50,7 +51,7 @@ export class ObservationsResolver {
   }
 
   @Query(() => Observation, { name: 'observation' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
+  findOne(@Args('id', { type: () => String }) id: string) {
     return this.observationsService.findOne(id)
   }
 

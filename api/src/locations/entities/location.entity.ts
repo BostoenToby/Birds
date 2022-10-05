@@ -4,24 +4,27 @@ import {
   CreateDateColumn,
   ObjectIdColumn,
   UpdateDateColumn,
+  Entity,
 } from 'typeorm'
 import { Observation } from 'src/observations/entities/observation.entity'
+import { ObjectId } from 'mongodb'
 
+@Entity()
 @ObjectType()
 export class Location {
   @Field(() => ID)
   @ObjectIdColumn()
-  id: string
+  id: ObjectId
 
   @Field(() => String)
   @Column()
   name: string
 
-  @Field()
-  @Column()
-  observationsId: string
+  // @Field()
+  // @Column()
+  // observationsId: string
 
-  @Field(() => [Observation])
+  @Field(() => [Observation], { nullable: 'itemsAndList' })
   @Column({ nullable: true })
   observations: Observation[]
 

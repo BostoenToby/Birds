@@ -4,13 +4,17 @@ import {
   CreateDateColumn,
   ObjectIdColumn,
   UpdateDateColumn,
+  Entity
 } from 'typeorm'
 import { ObjectId } from 'mongodb'
 import { Bird } from 'src/birds/entities/bird.entity'
 import { Location } from 'src/locations/entities/location.entity'
 
+@Entity()
 @ObjectType()
 export class Observation {
+  // Field is om te queryen in graphql
+  // Column is voor mongo --> typeorm
   @Field(() => ID)
   @ObjectIdColumn()
   id: ObjectId
@@ -36,7 +40,7 @@ export class Observation {
   @Field(() => Location)
   location: Location
 
-  @Column()
+  @Column() 
   locationId: string
 
   @Field({ nullable: true })

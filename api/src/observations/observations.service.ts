@@ -29,7 +29,7 @@ export class ObservationsService {
     return this.observationRepository.find()
   }
 
-  findOne(id: number): Promise<Observation> {
+  findOne(id: string): Promise<Observation> {
     return this.observationRepository.findOneBy(
       new ObjectId(id),
     )

@@ -15,7 +15,7 @@ export class LocationsService {
   create(createLocationInput: CreateLocationInput) {
     const location = new Location()
     location.name = createLocationInput.name
-    location.observationsId = createLocationInput.observationsId
+    // location.observationsId = createLocationInput.observationsId
     location.location = createLocationInput.location
     return this.locationRepository.save(location)
   }
@@ -24,17 +24,16 @@ export class LocationsService {
     return this.locationRepository.find()
   }
 
-  findOne(id: string): Promise<Location> {
-    return this.locationRepository.findOneBy(
-      new ObjectId(id)
-    )
+  async findOne(id: string): Promise<Location> {
+    console.log("finding location", id)
+    return this.locationRepository.findOneBy(new ObjectId(id))
   }
 
   update(updateLocationInput: UpdateLocationInput) {
     const update = new Location()
     update.id = new ObjectId(updateLocationInput.id)
     update.name = updateLocationInput.name
-    update.observationsId = updateLocationInput.observationsId
+    // update.observationsId = updateLocationInput.observationsId
     update.location = updateLocationInput.location
     return this.locationRepository.save(update)
   }
