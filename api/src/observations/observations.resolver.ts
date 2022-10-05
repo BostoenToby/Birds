@@ -26,12 +26,13 @@ export class ObservationsResolver {
 
   @ResolveField() //resolvefield omdat we in de entity enkel een field meegeven en geen column
   bird(@Parent() o: Observation): Promise<Bird> {
+    console.log(o)
     return this.birdService.findOne(o.birdId)
   } 
 
   @ResolveField()
   location(@Parent() o: Observation): Promise<Location> {
-    
+    console.log(o)
     return this.locationService.findOne(o.locationId)
   }
 

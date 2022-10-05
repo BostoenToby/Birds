@@ -67,6 +67,13 @@ const routes: RouteRecordRaw[] = [
           ),
       },
       {
+        path: 'birds/:id',
+        component: () =>
+          import(
+            '../screens/birds/_id.vue'
+          ),
+      },
+      {
         path: 'account',
         component: () =>
           import(

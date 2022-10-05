@@ -26,6 +26,7 @@
         <div v-for="b of result.birds" :key="b.id">
           <RouterLink :to="`/birds/${b.id}`" :key="b.id">
             <img
+            class="aspect-square w-full"
               :src="`/birds/${b.name}.webp`"
               :alt="`Drawing of a ${b.name}`"
             />

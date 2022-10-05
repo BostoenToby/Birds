@@ -53,7 +53,7 @@
               v-if="result"
               v-for="b of result.birds"
               :key="b.id"
-              value="b"
+              :value="b.id"
             >
               {{ b.name }}
             </option>
@@ -82,7 +82,7 @@
               v-if="result"
               v-for="l of result.locations"
               :key="l.id"
-              value="l"
+              :value="l.id"
             >
               {{ l.name }}
             </option>
@@ -182,9 +182,12 @@ export default {
     })
 
     const ADD_OBSERVATION = gql`
-      mutation createObservation ($input: CreateObservationInput) {
-        createObservation(createObservationInput: $input) {
+      mutation createObservation(
+        $createObservationInput: CreateObservationInput!
+      ) {
+        createObservation(createObservationInput: $createObservationInput) {
           id
+          name
         }
       }
     `
