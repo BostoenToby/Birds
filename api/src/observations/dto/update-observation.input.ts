@@ -1,5 +1,5 @@
 import { CreateObservationInput } from './create-observation.input';
-import { InputType, Field, Int, PartialType } from '@nestjs/graphql';
+import { InputType, Field, PartialType } from '@nestjs/graphql';
 
 @InputType()
 export class UpdateObservationInput extends PartialType(CreateObservationInput) {

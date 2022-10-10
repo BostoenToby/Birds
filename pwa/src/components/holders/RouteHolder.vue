@@ -8,9 +8,7 @@
         >
           {{ title }}
         </h1>
-        <slot name="header-actions">
-          
-        </slot>
+        <slot name="header-actions"> </slot>
       </div>
       <slot></slot>
     </main>
@@ -19,18 +17,15 @@
 
 <script lang="ts">
 export default {
-    props: ({
-      title: {
-        type: String,
-        required: false,
-      },
-    }),
+  props: {
+    title: {
+      type: String as () => string,
+      required: false,
+    },
+  },
 
-    setup(props: any){
-        return{ 
-            title: props.title
-        }
-    }
-
+  setup() {
+    return {}
+  },
 }
 </script>

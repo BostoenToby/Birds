@@ -1,6 +1,4 @@
-import { InputType, Int, Field } from '@nestjs/graphql';
-import { Bird } from 'src/birds/entities/bird.entity';
-import { Location } from 'src/locations/entities/location.entity';
+import { InputType, Field } from '@nestjs/graphql';
 import { Column } from 'typeorm';
 
 @InputType()

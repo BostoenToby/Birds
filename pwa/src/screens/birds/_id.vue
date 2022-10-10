@@ -70,10 +70,9 @@ export default {
 
     const birdName: Ref<String | undefined> = ref(result?.value?.bird.name || '...')
 
-    watch(result, () => {
-      console.log(result)
-      if (result.value) {
-        birdName.value = result.value.bird.name
+    watch(result, (result) => {
+      if (result) {
+        birdName.value = result.bird.name
       }
     })
 
