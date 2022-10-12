@@ -15,8 +15,9 @@ export class LocationsService {
   create(createLocationInput: CreateLocationInput) {
     const location = new Location()
     location.name = createLocationInput.name
+    location.area = createLocationInput.area
     // location.observationsId = createLocationInput.observationsId
-    location.location = createLocationInput.location
+    // location.location = createLocationInput.location
     return this.locationRepository.save(location)
   }
 
@@ -33,8 +34,9 @@ export class LocationsService {
     const update = new Location()
     update.id = new ObjectId(updateLocationInput.id)
     update.name = updateLocationInput.name
+    update.area = updateLocationInput.area
     // update.observationsId = updateLocationInput.observationsId
-    update.location = updateLocationInput.location
+    // update.location = updateLocationInput.location
     return this.locationRepository.save(update)
   }
 

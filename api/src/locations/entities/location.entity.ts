@@ -8,6 +8,8 @@ import {
 } from 'typeorm'
 import { Observation } from 'src/observations/entities/observation.entity'
 import { ObjectId } from 'mongodb'
+import { Polygon } from 'geojson'
+import { Area } from './area.entity'
 
 @Entity()
 @ObjectType()
@@ -20,6 +22,10 @@ export class Location {
   @Column()
   name: string
 
+  @Field(() => Area)
+  @Column({ nullable: true, type: 'simple-json' })
+  area: Polygon
+
   // @Field()
   // @Column()
   // observationsId: string
@@ -28,9 +34,9 @@ export class Location {
   @Column({ nullable: true })
   observations: Observation[]
 
-  @Field()
-  @Column()
-  location: string
+  // @Field()
+  // @Column()
+  // location: string
 
   @Field({ nullable: true })
   @CreateDateColumn({ type: 'timestamp', nullable: true })

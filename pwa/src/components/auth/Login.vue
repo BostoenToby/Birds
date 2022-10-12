@@ -1,6 +1,6 @@
 <template>
   <div>
-    <form @submit.}="submitForm">
+    <form @submit="submitForm">
       <header>
         <h2 class="mb-6 text-3xl">
           Login

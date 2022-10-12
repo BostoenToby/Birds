@@ -4,11 +4,13 @@ import {
   CreateDateColumn,
   ObjectIdColumn,
   UpdateDateColumn,
-  Entity
+  Entity,
 } from 'typeorm'
 import { ObjectId } from 'mongodb'
 import { Bird } from 'src/birds/entities/bird.entity'
 import { Location } from 'src/locations/entities/location.entity'
+import { Pointer } from '../../locations/entities/pointer.entity'
+import { Point } from 'geojson'
 
 @Entity()
 @ObjectType()
@@ -40,8 +42,12 @@ export class Observation {
   @Field(() => Location)
   location: Location
 
-  @Column() 
+  @Column()
   locationId: string
+
+  @Field((type) => Pointer)
+  @Column({ nullable: true, type: 'simple-json' })
+  geolocation: Point
 
   @Field({ nullable: true })
   @Column()

@@ -13,21 +13,16 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/',
     component: () =>
-      import(
-        '../components/holders/AppHolder.vue'
-      ), //this is a dynamic import, can also be a static import --> lazy loading
+      import('../components/holders/AppHolder.vue'), //this is a dynamic import, can also be a static import --> lazy loading
     children: [
       {
         path: '', // altijd naar / resolven
-        component: () =>
-          import('../screens/Home.vue'),
+        component: () => import('../screens/Home.vue'),
       },
       {
         path: 'observations',
         component: () =>
-          import(
-            '../screens/observations/index.vue'
-          ),
+          import('../screens/observations/index.vue'),
         meta: {
           needsAuthentication: true,
         },
@@ -35,9 +30,7 @@ const routes: RouteRecordRaw[] = [
       {
         path: 'observations/add',
         component: () =>
-          import(
-            '../screens/observations/Add.vue'
-          ),
+          import('../screens/observations/Add.vue'),
         meta: {
           needsAuthentication: true,
         },
@@ -45,16 +38,19 @@ const routes: RouteRecordRaw[] = [
       {
         path: 'locations',
         component: () =>
-          import(
-            '../screens/locations/index.vue'
-          ),
+          import('../screens/locations/index.vue'),
+      },
+      {
+        path: 'locations/add',
+        component: () =>
+          import('../screens/locations/Add.vue'),
+        meta: {
+          needsAuthentication: true,
+        },
       },
       {
         path: 'log',
-        component: () =>
-          import(
-            '../screens/log/index.vue'
-          ),
+        component: () => import('../screens/log/index.vue'),
         meta: {
           needsAuthentication: true,
         },
@@ -62,23 +58,15 @@ const routes: RouteRecordRaw[] = [
       {
         path: 'birds',
         component: () =>
-          import(
-            '../screens/birds/index.vue'
-          ),
+          import('../screens/birds/index.vue'),
       },
       {
         path: 'birds/:id',
-        component: () =>
-          import(
-            '../screens/birds/_id.vue'
-          ),
+        component: () => import('../screens/birds/_id.vue'),
       },
       {
         path: 'account',
-        component: () =>
-          import(
-            '../screens/Account.vue'
-          ),
+        component: () => import('../screens/Account.vue'),
         meta: {
           needsAuthentication: true,
         },
@@ -89,16 +77,12 @@ const routes: RouteRecordRaw[] = [
     path: '/auth',
     redirect: '/auth/login',
     component: () =>
-      import(
-        '../components/holders/AuthHolder.vue'
-      ),
+      import('../components/holders/AuthHolder.vue'),
     children: [
       {
         path: 'login',
         component: () =>
-          import(
-            '../components/auth/Login.vue'
-          ),
+          import('../components/auth/Login.vue'),
         meta: {
           cantAuthenticate: true,
         },
@@ -106,9 +90,7 @@ const routes: RouteRecordRaw[] = [
       {
         path: 'register',
         component: () =>
-          import(
-            '../components/auth/Register.vue'
-          ),
+          import('../components/auth/Register.vue'),
         meta: {
           cantAuthenticate: true,
         },
@@ -116,9 +98,7 @@ const routes: RouteRecordRaw[] = [
       {
         path: 'forgot-password',
         component: () =>
-          import(
-            '../components/auth/ForgotPassword.vue'
-          ),
+          import('../components/auth/ForgotPassword.vue'),
       },
     ],
   },
@@ -126,9 +106,7 @@ const routes: RouteRecordRaw[] = [
     path: '/:pathMatch(.*)*', //notatie voor wildcard, iedere pagina die we niet zelf gemaakt hebben
     name: 'ClientError',
     component: () =>
-      import(
-        '../screens/generic/ClientError.vue'
-      ), //als je deze static import (bovenaan) zal deze pagina altijd inladen als je naar gelijk welke pagina gaat --> verspilling van bandwidth
+      import('../screens/generic/ClientError.vue'), //als je deze static import (bovenaan) zal deze pagina altijd inladen als je naar gelijk welke pagina gaat --> verspilling van bandwidth
   },
 ]
 
@@ -142,16 +120,9 @@ router.beforeEach(
     to: RouteLocationNormalized,
     from: RouteLocationNormalized,
   ) => {
-    if (
-      to.meta.needsAuthentication &&
-      !user.value
-    )
+    if (to.meta.needsAuthentication && !user.value)
       return 'auth/login'
-    if (
-      to.meta.cantAuthenticate &&
-      user.value
-    )
-      return '/'
+    if (to.meta.cantAuthenticate && user.value) return '/'
   },
 )
 

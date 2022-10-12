@@ -15,6 +15,9 @@ import { BirdsService } from 'src/birds/birds.service'
 import { LocationsService } from 'src/locations/locations.service'
 import { Bird } from 'src/birds/entities/bird.entity'
 import { Location } from 'src/locations/entities/location.entity'
+import { FirebaseGuard } from 'src/auth/guard/firebase.guard'
+import { UseGuards } from '@nestjs/common'
+import { Currentuser } from 'src/auth/decorators/user.decorator'
 
 @Resolver(() => Observation)
 export class ObservationsResolver {
@@ -46,8 +49,10 @@ export class ObservationsResolver {
     )
   }
 
+  // @UseGuards(FirebaseGuard)
   @Query(() => [Observation], { name: 'observations' })
-  findAll() {
+  findAll(@Currentuser() user) {
+    console.log(user) //see information of the user that is logged in
     return this.observationsService.findAll()
   }
 

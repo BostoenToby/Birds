@@ -1,91 +1,129 @@
 <template>
-  <div id="mapContainer" class=""></div>
+  <div class="min-h-[50vh]" ref="mapElement"></div>
 </template>
 
 <script lang="ts">
-import mapboxgl from 'mapbox-gl'
+import 'mapbox-gl/dist/mapbox-gl.css'
+
+import mapboxgl, { LngLatLike, Map, MapMouseEvent, Marker } from 'mapbox-gl'
+import { onMounted, Ref, ref, watch } from 'vue-demi'
+import { Polygon } from 'geojson'
 
 export default {
-  setup() {
-    return {}
+  // Props
+  props: {
+    mapCoordinates: {
+      type: Object as () => LngLatLike,
+      required: true,
+    },
+    markers: {
+      type: Array as () => LngLatLike[],
+      required: false,
+      default: () => [],
+    },
+    // TODO: Set polygon on map
+    polygons: {
+      type: Array as () => Polygon[],
+      required: false,
+    },
   },
-  mounted() {
-    //@ts-ignore
+
+  setup(props, { emit }) {
+    const mapElement: Ref<HTMLElement | undefined> = ref()
+    const selectedMarker: Ref<Marker | undefined> = ref()
+
     mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN
 
-    const coordinates = [-69.25657, 45.52524]
+    const renderMarkerIfAny = (map: Map) => {
+      if (props.markers && props.markers.length < 1) return
 
-    const map = new mapboxgl.Map({
-      container: 'mapContainer',
-      style: 'mapbox://styles/mapbox/streets-v11',
-      center: coordinates,
-      zoom: 7,
-      projection: 'globe',
-    })
+      for (const marker of props.markers!) {
+        new mapboxgl.Marker().setLngLat(marker).addTo(map)
+      }
+    }
 
-    map.on('style.load', () => {
-      map.setFog({})
-    })
+    const centerMapOnPolygons = (map: Map) => { 
+      if(props.polygons && props.polygons.length < 1) return
 
-    //return coordinates on tap
-    map.on('click', (e) => {
-      console.log(`A click event has occurred at ${e.lngLat}`)
-    })
+      let { lng, lat } = { lng: 0, lat: 0 }
+      let amount: number = 0
 
-    //Added polygon
-    map.on('load', () => {
-      // Add a data source containing GeoJSON data.
-      map.addSource('maine', {
-        type: 'geojson',
-        data: {
-          type: 'Feature',
-          geometry: {
-            type: 'Polygon',
-            coordinates: [
-              [
-                [-67.13734, 45.13745],
-                [-66.96466, 44.8097],
-                [-68.03252, 44.3252],
-                [-69.06, 43.98],
-                [-70.11617, 43.68405],
-                [-70.64573, 43.09008],
-                [-70.75102, 43.08003],
-                [-70.79761, 43.21973],
-                [-70.98176, 43.36789],
-                [-70.94416, 43.46633],
-                [-71.08482, 45.30524],
-                [-70.66002, 45.46022],
-                [-70.30495, 45.91479],
-                [-70.00014, 46.69317],
-                [-69.23708, 47.44777],
-                [-68.90478, 47.18479],
-                [-68.2343, 47.35462],
-                [-67.79035, 47.06624],
-                [-67.79141, 45.70258],
-                [-67.13734, 45.13745],
-              ],
-            ],
+      props.polygons!.map(({coordinates}) => {
+        coordinates.map((coordinate) => {
+          coordinate.map(([x, y]) => {
+            amount++
+            lng += x
+            lat += y
+          })
+        })
+      })
+
+      map.flyTo({
+        center: [lng! / amount, lat! / amount],
+        zoom: 15,
+        speed: 0.7
+      })
+      
+    }
+
+    const renderPolygonsIfAny = (map: Map) => {
+      console.log(props.polygons)
+
+      if (props.polygons && props.polygons.length < 1) return
+
+      for (const polygon in props.polygons!) {
+        map.addSource(`area-${polygon}`, {
+          type: 'geojson',
+          data: props.polygons[polygon],
+        })
+
+        map.addLayer({
+          id: `area-${polygon}`,
+          type: 'fill',
+          source: `area-${polygon}`,
+          layout: {},
+          paint: {
+            'fill-color': '#088',
+            'fill-opacity': 0.6,
           },
-        },
+        })
+      }
+      centerMapOnPolygons(map)
+    }
+
+    // DOM Content Loaded
+    onMounted(() => {
+      const map = new mapboxgl.Map({
+        container: mapElement.value!,
+        style: 'mapbox://styles/mapbox/streets-v11',
+        center: props.mapCoordinates,
+        zoom: 15,
+        projection: { name: 'globe' },
       })
-      // Add a new layer to visualize the polygon.
-      map.addLayer({
-        id: 'maine',
-        type: 'fill',
-        source: 'maine', // reference the data source
-        layout: {},
-        paint: {
-          'fill-color': '#0080ff', // blue color fill
-          'fill-opacity': 0.5,
-        },
+
+      map.on('style.load', () => {
+        map.setFog({}) // Set the default atmosphere style
       })
-      new mapboxgl.Marker({
-        color: '#FFFFFF',
-        draggable: true,
+
+      renderMarkerIfAny(map)
+      renderPolygonsIfAny(map)
+
+      map.on('click', (e: MapMouseEvent) => {
+        if (selectedMarker.value) selectedMarker.value.remove()
+        selectedMarker.value = new Marker().setLngLat(e.lngLat).addTo(map)
+
+        emit('coordinateSelection', e.lngLat)
       })
-        .setLngLat([-69.25657, 45.52524])
-        .addTo(map)
+
+      watch(props, () => {
+        renderMarkerIfAny(map)
+        renderPolygonsIfAny(map)
+      })
     })
+
+    return {
+      mapElement,
+    }
   },
 }
 </script>

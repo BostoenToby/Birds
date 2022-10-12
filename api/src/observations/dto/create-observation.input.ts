@@ -1,5 +1,7 @@
-import { InputType, Field } from '@nestjs/graphql';
-import { Column } from 'typeorm';
+import { InputType, Field } from '@nestjs/graphql'
+import { Point } from 'geojson'
+import { Column } from 'typeorm'
+import { Pointer } from '../../locations/entities/pointer.entity'
 
 @InputType()
 export class CreateObservationInput {
@@ -22,6 +24,9 @@ export class CreateObservationInput {
   @Field()
   @Column()
   locationId: string
+
+  @Field((type) => Pointer)
+  geolocation: Point
 
   // @Field(() => Location)
   // location: Location
