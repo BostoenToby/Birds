@@ -15,9 +15,4 @@ export class UpdateUserInput extends PartialType(
   @Field()
   id: string
 
-  @Field(() => [CreateObservationInput], { nullable: 'itemsAndList' }) //hier createobservationinput --> omdat we in graphql een observation willen kunnen maken
-  observations: Observation[]
-
-  @Field(() => Int)
-  observationsCount: number
 }

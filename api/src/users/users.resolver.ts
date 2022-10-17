@@ -36,7 +36,7 @@ export class UsersResolver {
     return this.usersService.findOne(id)
   }
 
-  @Query(() => User, { name: 'user' })
+  @Query(() => User, { name: 'findByUid' })
   findByUid(@Args('uid', { type: () => String }) uid: string) {
     return this.usersService.findOneByUid(uid)
   }

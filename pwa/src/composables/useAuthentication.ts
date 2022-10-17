@@ -1,24 +1,22 @@
 import {
   createUserWithEmailAndPassword,
+  sendPasswordResetEmail,
   signInWithEmailAndPassword,
   updateProfile,
   User,
   UserCredential,
-  sendPasswordResetEmail,
 } from 'firebase/auth'
-import useFirebase from './useFirebase'
 import { ref, Ref } from 'vue'
 
+import useFirebase from './useFirebase'
+
 const user: Ref<User | null> = ref(null)
-// stel dat dit binnen export default stond gaat dit iedere keer gebruikt worden als de functie opgeroepen word
 
 export default () => {
   const { auth } = useFirebase()
+
   const setUser = (u: User | null) => (user.value = u)
 
-  console.log(auth)
-
-  // TODO: register
   const register = async (
     name: string,
     email: string,
@@ -44,8 +42,7 @@ export default () => {
     })
   }
 
-  // TODO: login
-  const login = async (
+  const login = (
     email: string,
     password: string,
   ): Promise<Ref<User | null>> => {
@@ -61,20 +58,6 @@ export default () => {
     })
   }
 
-  // TODO: restore Auth
-  const restoreUser = (): Promise<Ref<User | null>> => {
-    return new Promise((resolve, reject) => {
-      auth.onAuthStateChanged((u: User | null) => {
-        if (u) {
-          setUser(u)
-          resolve(user)
-        } else {
-          resolve(ref(null))
-        }
-      })
-    })
-  }
-  // TODO: logout
   const logout = (): Promise<void> => {
     return new Promise((resolve, reject) => {
       auth
@@ -89,7 +72,6 @@ export default () => {
     })
   }
 
-  // TODO: forgot password
   const forgotPassword = (email: string): Promise<void> => {
     return new Promise((resolve, reject) => {
       sendPasswordResetEmail(auth, email)
@@ -98,16 +80,27 @@ export default () => {
     })
   }
 
-  // TODO: track user
+  const restoreUser = (): Promise<void> => {
+    return new Promise((resolve, reject) => {
+      auth.onAuthStateChanged((u: User | null) => {
+        if (u) {
+          setUser(u)
+          resolve()
+        } else {
+          resolve()
+        }
+      })
+    })
+  }
 
   return {
     user,
 
     register,
-    setUser,
     login,
     logout,
-    restoreUser,
+    setUser,
     forgotPassword,
+    restoreUser,
   }
 }

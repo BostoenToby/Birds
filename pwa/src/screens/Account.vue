@@ -1,28 +1,25 @@
 <template>
-  <route-holder :title="`Hi, ${user?.displayName}`" >
-  <button @click="handleLogOut">
-    Log out
-  </button>
-</route-holder>
+  <route-holder :title="`Hi, ${user?.displayName}`">
+    {{ customUser }}
+    <button @click="handleLogOut">Log out</button>
+  </route-holder>
 </template>
 
 <script lang="ts">
-// als setup bij script staat is alles dat erna komt in de setup function gepropt
+import RouteHolder from '../components/holders/RouteHolder.vue'
 import useAuthentication from '../composables/useAuthentication'
 import { useRouter } from 'vue-router'
-import RouteHolder from '../components/holders/RouteHolder.vue'
+import useCustomUser from '../composables/useCustomerUser'
 
 export default {
+  components: {
+    RouteHolder,
+  },
+
   setup() {
-    const { user, logout } =
-      useAuthentication()
+    const { user, logout } = useAuthentication()
+    const { customUser } = useCustomUser()
     const { replace } = useRouter()
-
-    const getToken = async() => {
-      console.log(await user.value?.getIdToken())
-    }
-
-    getToken()
 
     const handleLogOut = () => {
       logout().then(() => {
@@ -30,9 +27,16 @@ export default {
       })
     }
 
+    const getToken = async () => {
+      console.log(await user.value?.getIdToken())
+    }
+
+    getToken()
+
     return {
       user,
-      RouteHolder,
+      customUser,
+
       handleLogOut,
     }
   },

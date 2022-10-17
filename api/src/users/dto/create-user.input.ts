@@ -1,5 +1,4 @@
-import { InputType, Int, Field } from '@nestjs/graphql';
-import { Observation } from 'src/observations/entities/observation.entity';
+import { InputType, Field } from '@nestjs/graphql';
 
 @InputType()
 export class CreateUserInput {

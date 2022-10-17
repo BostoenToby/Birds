@@ -49,10 +49,10 @@ export class ObservationsResolver {
     )
   }
 
-  // @UseGuards(FirebaseGuard)
+  @UseGuards(FirebaseGuard)
   @Query(() => [Observation], { name: 'observations' })
-  findAll(@Currentuser() user) {
-    console.log(user) //see information of the user that is logged in
+  findAll(@Currentuser() user) { //currentUser --> haalt uit de guard de userId 
+    console.log(user.uid) //see information of the user that is logged in
     return this.observationsService.findAll()
   }
 
