@@ -29,6 +29,7 @@ export class BirdsService {
   }
 
   findOne(id: string): Promise<Bird> {
+    console.log("finding location", id)
     return this.birdRepository.findOne(new ObjectId(id))
   }
 
@@ -44,7 +45,7 @@ export class BirdsService {
     return this.birdRepository.save(update) //Save gives us an advantage
   }
 
-  async remove(id: String): Promise<DeleteResult> {
+  remove(id: String): Promise<DeleteResult> {
     return this.birdRepository.delete(new ObjectId(id))
   }
 }

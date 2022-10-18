@@ -1,16 +1,15 @@
 import { InputType, Int, Field } from '@nestjs/graphql';
-import { Observation } from 'src/observations/entities/observation.entity';
+import { Polygon } from 'geojson';
+import { Area } from '../entities/area.entity';
 
 @InputType()
 export class CreateLocationInput {
   @Field()
   name: string
 
-  // @Field(() => Observation)
-  // observations: Observation[]
-  @Field()
-  observationsId: string
+  // @Field()
+  // location: string
 
-  @Field()
-  location: string
+  @Field(() => Area)
+  area: Polygon
 }

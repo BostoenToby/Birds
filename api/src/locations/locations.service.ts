@@ -5,6 +5,7 @@ import { CreateLocationInput } from './dto/create-location.input'
 import { UpdateLocationInput } from './dto/update-location.input'
 import { Location } from './entities/location.entity'
 import { ObjectId } from 'mongodb'
+import { Point } from 'geojson'
 
 @Injectable()
 export class LocationsService {
@@ -15,8 +16,9 @@ export class LocationsService {
   create(createLocationInput: CreateLocationInput) {
     const location = new Location()
     location.name = createLocationInput.name
-    location.observationsId = createLocationInput.observationsId
-    location.location = createLocationInput.location
+    location.area = createLocationInput.area
+    // location.observationsId = createLocationInput.observationsId
+    // location.location = createLocationInput.location
     return this.locationRepository.save(location)
   }
 
@@ -24,18 +26,33 @@ export class LocationsService {
     return this.locationRepository.find()
   }
 
-  findOne(id: string): Promise<Location> {
+  async findOne(id: string): Promise<Location> {
+    console.log('finding location', id)
     return this.locationRepository.findOneBy(
-      new ObjectId(id)
+      new ObjectId(id),
     )
+  }
+
+  findLocationByPoint(p: Point): Promise<Location[]> {
+    return this.locationRepository.find({
+      where: {
+        area: {
+          //@ts-ignore
+          $geoIntersects: {
+            $geometry: p,
+          },
+        },
+      },
+    })
   }
 
   update(updateLocationInput: UpdateLocationInput) {
     const update = new Location()
     update.id = new ObjectId(updateLocationInput.id)
     update.name = updateLocationInput.name
-    update.observationsId = updateLocationInput.observationsId
-    update.location = updateLocationInput.location
+    update.area = updateLocationInput.area
+    // update.observationsId = updateLocationInput.observationsId
+    // update.location = updateLocationInput.location
     return this.locationRepository.save(update)
   }
 

@@ -1,55 +1,104 @@
 <template>
-    <ul class="grid grid-cols-4 w-full sm:w-auto text-center items-center text-xs space-x-3 font-medium sm:space-x-3 sm:text-sm">
-                <li>
-                    <router-link exact-active-class="opacity-40" class="outline-none focus-visible:ring-2 rounded-md inline-block px-3 py-6" to="/">
-                        <Home class="h-6 sm:hidden mb-2 mx-auto"/>
-                        Home
-                    </router-link>
-                </li>
-                <li>
-                    <router-link active-class="opacity-40" class="outline-none focus-visible:ring-2 rounded-md inline-block px-3 py-6" to="/birds">
-                        <Feather class="h-6 sm:hidden mb-2 mx-auto"/>
-                        Birds
-                    </router-link>
-                </li>
-                <li>
-                    <router-link active-class="opacity-40" class="outline-none focus-visible:ring-2 rounded-md inline-block px-3 py-6" to="/observations">
-                        <Clipboard class="h-6 sm:hidden mb-2 mx-auto"/>
-                        Observations
-                    </router-link>
-                </li>
-                <li>
-                    <router-link active-class="opacity-40" class="outline-none focus-visible:ring-2 rounded-md inline-block px-3 py-6" to="/log">
-                        <Scroll class="h-6 sm:hidden mb-2 mx-auto"/>
-                        Log
-                    </router-link>
-                </li>
-                <li class="hidden pl-6 sm:block">
-                    <router-link class="px-3 py-6 outline-none focus-visible:ring-2 rounded-md" to="/account" v-if="user">
-                        {{user.displayName}}
-                    </router-link>
-                    <router-link class="px-3 py-6" to="/auth/login" v-else></router-link>
-                </li>
-            </ul>
+  <ul
+    class="grid w-full grid-cols-4 items-center text-center text-xs font-medium sm:w-auto sm:space-x-3 sm:text-left sm:text-sm"
+  >
+    <li>
+      <router-link
+        exact-active-class="opacity-40"
+        class="inline-block rounded-md px-3 py-6 outline-none focus-visible:ring-2"
+        to="/"
+      >
+        <Home class="mx-auto mb-2 h-5 sm:hidden" />
+        Home
+      </router-link>
+    </li>
+
+    <li>
+      <router-link
+        active-class="opacity-40"
+        class="inline-block rounded-md px-3 py-6 outline-none focus-visible:ring-2"
+        to="/birds"
+      >
+        <Feather class="mx-auto mb-2 h-5 sm:hidden" />
+        Birds
+      </router-link>
+    </li>
+
+    <li>
+      <router-link
+        active-class="opacity-40"
+        class="inline-block rounded-md px-3 py-6 outline-none focus-visible:ring-2"
+        to="/locations"
+      >
+        <Feather class="mx-auto mb-2 h-5 sm:hidden" />
+        Location
+      </router-link>
+    </li>
+
+    <li>
+      <router-link
+        active-class="opacity-40"
+        class="inline-block rounded-md px-3 py-6 outline-none focus-visible:ring-2"
+        to="/observations"
+      >
+        <Clipboard class="mx-auto mb-2 h-5 sm:hidden" />
+        Observations
+      </router-link>
+    </li>
+
+    <li>
+      <router-link
+        active-class="opacity-40"
+        class="inline-block rounded-md px-3 py-6 outline-none focus-visible:ring-2 sm:hidden"
+        to="/account"
+      >
+        <User class="mx-auto mb-2 h-5 sm:hidden" />
+        User
+      </router-link>
+    </li>
+
+    <li class="hidden pl-6 sm:block">
+      <router-link
+        class="inline-block rounded-md px-3 py-6 outline-none focus-visible:ring-2"
+        rounded-md
+        ring-2
+        to="/account"
+        v-if="user"
+      >
+        {{ user.displayName }}
+      </router-link>
+      <router-link
+        class="inline-block rounded-md px-3 py-6 outline-none focus-visible:ring-2"
+        rounded-md
+        ring-2
+        to="/auth/login"
+        v-else
+      >
+        Login
+      </router-link>
+    </li>
+  </ul>
 </template>
 
 <script lang="ts">
-    import { defineComponent } from 'vue'
-    import { Home, Feather, Scroll, Clipboard } from 'lucide-vue-next'
-    import useAuthentication from '../../composables/useAuthentication'
+import {
+  Home,
+  Feather,
+  User,
+  Clipboard,
+} from 'lucide-vue-next'
 
-    export default defineComponent({
-        components: {
-            Home,
-            Feather,
-            Scroll,
-            Clipboard,
-        },  
-        setup(){
-            const { user } = useAuthentication()
-            return {
-                user
-            }
-        }
-    })
+import useAuthentication from '../../composables/useAuthentication'
+
+export default {
+  components: { Home, Feather, User, Clipboard },
+
+  setup() {
+    const { user } = useAuthentication()
+
+    return {
+      user,
+    }
+  },
+}
 </script>

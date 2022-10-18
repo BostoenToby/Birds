@@ -9,7 +9,7 @@ import {
 } from './stubs/birds.stubs'
 import { ObjectId } from 'mongodb'
 import { MessageTypes } from '../../src/bootstrap/entities/ClientMessage'
-import { ClientMessage } from 'src/entities/ClientMessage'
+import { ClientMessage } from '../../src/entities/ClientMessage'
 
 describe('BirdsResolver', () => {
   let resolver: BirdsResolver
