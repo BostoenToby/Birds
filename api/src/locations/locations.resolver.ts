@@ -9,6 +9,8 @@ import { LocationsService } from './locations.service'
 import { Location } from './entities/location.entity'
 import { CreateLocationInput } from './dto/create-location.input'
 import { UpdateLocationInput } from './dto/update-location.input'
+import { Pointer } from './entities/pointer.entity'
+import { Point } from 'geojson'
 
 @Resolver(() => Location)
 export class LocationsResolver {
@@ -32,6 +34,13 @@ export class LocationsResolver {
   @Query(() => Location, { name: 'location' })
   findOne(@Args('id', { type: () => String }) id: string) {
     return this.locationsService.findOne(id)
+  }
+
+  @Query(() => [Location], { name: 'findLocationByPoint' })
+  findAreaByPoint(
+    @Args('point', { type: () => Pointer }) p: Point,
+  ): Promise<Location[]> {
+    return this.locationsService.findLocationByPoint(p)
   }
 
   @Mutation(() => Location)

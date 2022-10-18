@@ -1,4 +1,4 @@
-import { ObjectType, Field, Int, ID } from '@nestjs/graphql'
+import { ObjectType, Field, ID } from '@nestjs/graphql'
 import {
   Column,
   CreateDateColumn,
@@ -7,27 +7,27 @@ import {
   UpdateDateColumn,
 } from 'typeorm'
 import { ObjectId } from 'mongodb'
+import { Point } from 'geojson'
 
-import { Observation } from 'src/observations/entities/observation.entity'
+import { Pointer } from '../../locations/entities/pointer.entity'
+import { User } from '../../users/entities/user.entity'
 
 @Entity()
 @ObjectType()
-export class User {
+export class Livelocation {
   @Field(() => ID)
   @ObjectIdColumn()
   id: ObjectId
 
-  @Field()
-  @Column()
-  uid: string
+  @Column() //mongodb
+  idUser: string
 
-  @Field(() => [Observation], { nullable: 'itemsAndList' }) // Can return []
-  @Column({ nullable: true })
-  observations?: Observation[]
+  @Field(() => User) //graphql
+  user: User
 
-  @Field(() => Int)
-  @Column()
-  observationsCount?: number
+  @Field((type) => Pointer)
+  @Column({ nullable: true, type: 'simple-json' })
+  geolocation: Point
 
   @Field({ nullable: true })
   @CreateDateColumn({ type: 'timestamp', nullable: true })

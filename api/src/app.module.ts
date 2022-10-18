@@ -6,6 +6,9 @@ import { ObservationsModule } from './observations/observations.module'
 import { DatabaseSeedModule } from './seed/seed.module'
 import { AuthModule } from './auth/auth.module'
 import { UsersModule } from './users/users.module'
+import { LivelocationsModule } from './livelocations/livelocations.module'
+import { NotificationsModule } from './notifications/notifications.module'
+import { NotificationsGateway } from './notifications/notifications.gateway'
 
 @Module({
   imports: [
@@ -16,6 +19,8 @@ import { UsersModule } from './users/users.module'
     DatabaseSeedModule,
     AuthModule,
     UsersModule,
+    LivelocationsModule,
+    NotificationsModule
   ], //TODO: Enchancement? Move to async provider
   controllers: [],
   providers: [],

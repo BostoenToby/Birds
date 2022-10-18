@@ -5,6 +5,7 @@ import { CreateLocationInput } from './dto/create-location.input'
 import { UpdateLocationInput } from './dto/update-location.input'
 import { Location } from './entities/location.entity'
 import { ObjectId } from 'mongodb'
+import { Point } from 'geojson'
 
 @Injectable()
 export class LocationsService {
@@ -26,8 +27,23 @@ export class LocationsService {
   }
 
   async findOne(id: string): Promise<Location> {
-    console.log("finding location", id)
-    return this.locationRepository.findOneBy(new ObjectId(id))
+    console.log('finding location', id)
+    return this.locationRepository.findOneBy(
+      new ObjectId(id),
+    )
+  }
+
+  findLocationByPoint(p: Point): Promise<Location[]> {
+    return this.locationRepository.find({
+      where: {
+        area: {
+          //@ts-ignore
+          $geoIntersects: {
+            $geometry: p,
+          },
+        },
+      },
+    })
   }
 
   update(updateLocationInput: UpdateLocationInput) {
