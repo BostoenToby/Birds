@@ -4,7 +4,7 @@ import {
 } from '@nestjs/common'
 import { GqlExecutionContext } from '@nestjs/graphql'
 import { AuthGuard } from '@nestjs/passport'
-@Injectable()
+@Injectable() //injectable zorgt dat dit een singleton is en dat deze dus altijd opnieuw gebruikt wordt idpv opnieuw een object hiervan te maken
 export class FirebaseGuard extends AuthGuard(
   'firebase-auth',
 ) {

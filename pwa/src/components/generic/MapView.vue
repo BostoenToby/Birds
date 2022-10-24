@@ -25,6 +25,7 @@ export default {
     polygons: {
       type: Array as () => Polygon[],
       required: false,
+      default: () => []
     },
   },
 

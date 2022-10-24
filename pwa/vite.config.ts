@@ -2,6 +2,7 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import Unocss from 'unocss/vite'
 import { VitePluginFonts } from 'vite-plugin-fonts'
+import { VitePWA } from 'vite-plugin-pwa'
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -23,6 +24,11 @@ export default defineConfig({
           },
         ],
       ],
+    }),
+
+    VitePWA({
+      // filename: 'sw.ts', //als je zelf wilt werken met serviceworkers
+      strategies: 'generateSW' //niet zelfde strategies als in theorie van caching enz...
     }),
 
     VitePluginFonts({
