@@ -2,7 +2,6 @@ import {
   FirebaseApp,
   initializeApp,
 } from 'firebase/app'
-import { ref, Ref } from 'vue'
 import {
   getAuth,
   Auth,

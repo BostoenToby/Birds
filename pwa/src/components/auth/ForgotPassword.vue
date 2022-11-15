@@ -2,9 +2,7 @@
   <div>
     <form @submit.prevent="submitForm">
       <header>
-        <h2 class="mb-6 text-3xl">
-          Forgot password
-        </h2>
+        <h2 class="mb-6 text-3xl">Forgot password</h2>
       </header>
 
       <div
@@ -18,9 +16,7 @@
           @click="errorMessage = ''"
           class="rounded-full p-3 ring-red-500 hover:bg-red-200 focus:outline-none focus:ring-1"
         >
-          <X
-            class="h-4 w-4 text-red-600"
-          />
+          <X class="h-4 w-4 text-red-600" />
         </button>
       </div>
 
@@ -29,9 +25,7 @@
           class="mb-1 block text-neutral-500 focus-within:text-neutral-900"
           for="email"
         >
-          <span class="mb-2 block"
-            >Email</span
-          >
+          <span class="mb-2 block">Email</span>
           <input
             v-model="userInput.email"
             id="email"
@@ -48,19 +42,14 @@
         :disabled="loading"
       >
         <span v-if="!loading"
-          >Reset password reset
-          link</span
+          >Reset password reset link</span
         >
         <div v-else>
-          <Loader2
-            class="animate-spin"
-          />
+          <Loader2 class="animate-spin" />
         </div>
       </button>
 
-      <p
-        class="mt-3 text-center text-sm"
-      >
+      <p class="mt-3 text-center text-sm">
         <RouterLink
           to="/auth/login"
           class="rounded-md outline-none ring-neutral-300 hover:underline focus-visible:ring"
@@ -73,17 +62,9 @@
 </template>
 
 <script lang="ts">
-import {
-  defineComponent,
-  reactive,
-  ref,
-  Ref,
-} from 'vue'
+import { defineComponent, reactive, ref, Ref } from 'vue'
 
-import {
-  X,
-  Loader2,
-} from 'lucide-vue-next'
+import { X, Loader2 } from 'lucide-vue-next'
 
 import useAuthentication from '../../composables/useAuthentication'
 
@@ -96,13 +77,10 @@ export default defineComponent({
   },
 
   setup() {
-    const { forgotPassword } =
-      useAuthentication()
+    const { forgotPassword } = useAuthentication()
     const { replace } = useRouter()
-    const errorMessage: Ref<string> =
-      ref('')
-    const loading: Ref<boolean> =
-      ref(false)
+    const errorMessage: Ref<string> = ref('')
+    const loading: Ref<boolean> = ref(false)
 
     const userInput = reactive({
       email: '',
@@ -112,19 +90,12 @@ export default defineComponent({
       loading.value = true
       if (userInput.email === '') {
         loading.value = false
-        errorMessage.value =
-          'Please fill in all fields'
+        errorMessage.value = 'Please fill in all fields'
         return
       }
       forgotPassword(userInput.email)
-        .then(() =>
-          console.log('New mail sent'),
-        )
-        .catch(
-          (error) =>
-            (errorMessage.value =
-              error),
-        )
+        .then(() => console.log('New mail sent'))
+        .catch((error) => (errorMessage.value = error))
       replace('/auth/login')
     }
 

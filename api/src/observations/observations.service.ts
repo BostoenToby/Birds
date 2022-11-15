@@ -22,6 +22,7 @@ export class ObservationsService {
     observation.locationId = createObservationInput.locationId
     observation.description = createObservationInput.description
     observation.active = createObservationInput.active
+    observation.geolocation = createObservationInput.geolocation
     return this.observationRepository.save(observation)
   }
 
@@ -29,7 +30,7 @@ export class ObservationsService {
     return this.observationRepository.find()
   }
 
-  findOne(id: number): Promise<Observation> {
+  findOne(id: string): Promise<Observation> {
     return this.observationRepository.findOneBy(
       new ObjectId(id),
     )
@@ -45,6 +46,7 @@ export class ObservationsService {
     update.description = updateObservationInput.description
     update.locationId = updateObservationInput.locationId
     update.active = updateObservationInput.active
+    update.geolocation = updateObservationInput.geolocation
     return this.observationRepository.save(update)
   }
 

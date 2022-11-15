@@ -2,3 +2,5 @@
 pwa/node_modules
 **/.env
 **/dist/
+api/birds-da77f-firebase-adminsdk-xjxen-2db480c00a.json
+pwa/src/utils/mct-birds-translations.json
