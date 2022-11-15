@@ -51,7 +51,7 @@ export default {
 
       props.polygons!.map(({coordinates}) => {
         coordinates.map((coordinate) => {
-          coordinate.map(([x, y]) => {
+          coordinate.map(([x, y]: any) => {
             amount++
             lng += x
             lat += y

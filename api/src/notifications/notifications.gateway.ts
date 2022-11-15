@@ -16,7 +16,7 @@ import { Livelocation } from 'src/livelocations/entities/livelocation.entity'
 import { UsePipes, ValidationPipe } from '@nestjs/common'
 import { MyWebSocketValidationPipe } from 'src/bootstrap/exceptions/MyWebSocketValidation'
 
-@WebSocketGateway(3004)
+@WebSocketGateway() //je kan een andere poort meegeven, maar indien er geen poort meegegeven is --> zelfde poort als graphql
 export class NotificationsGateway
   implements OnGatewayConnection, OnGatewayDisconnect
 {
@@ -57,7 +57,7 @@ export class NotificationsGateway
     }
 
     // this.server.emit('birdspotter:newlocation', data) //send to all clients including the one that sent the message
-    //client.broadcast.emit('birdspotter:newlocation', data) //to all but the sender
+    // client.broadcast.emit('birdspotter:newlocation', data) //to all but the sender
     return Promise.resolve(liveLoc)
   }
 
